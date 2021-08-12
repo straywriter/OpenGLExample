@@ -1,5 +1,5 @@
 
-#include "DrawTriangle.hpp"
+#include "DrawRect.hpp"
 
 int main()
 {
