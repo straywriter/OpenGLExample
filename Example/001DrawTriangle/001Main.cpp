@@ -3,6 +3,6 @@
 
 int main()
 {
-    DrawRect app;
+    DrawTrangle app;
     app.run();
 }

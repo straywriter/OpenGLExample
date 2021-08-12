@@ -18,8 +18,6 @@
 class DrawRect : public GLFWApplication
 {
   public:
-
-
     int vertexShader;
     int fragmentShader;
     int shaderProgram;

@@ -1,7 +1,7 @@
 #pragma once
 
-#include <string>
 #include <iostream>
+#include <string>
 
 #include <glad/glad.h>
 
@@ -21,7 +21,7 @@ class GLFWApplication : public IApplication
     {
         width = 800;
         height = 600;
-        windowName = "null";
+        windowName = "";
         init();
     }
 
@@ -36,21 +36,23 @@ class GLFWApplication : public IApplication
         destory();
     }
 
-    bool init() 
+    bool init()
     {
-        initGLFW();
+        if (!initGLFW())
+            return false;
         if (!initWindow())
             return false;
         if (!initOpenGL())
             return false;
         initOpenGLDebug();
+        return true;
     }
 
-     void run() 
+    void run()
     {
     }
 
-     void destroy() 
+    void destroy()
     {
         destoryGLFW();
     }
@@ -100,13 +102,15 @@ class GLFWApplication : public IApplication
         return true;
     }
 
-    void initGLFW()
+    bool initGLFW()
     {
-        glfwInit();
+        if (!glfwInit())
+            return false;
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+        return true;
     }
 
     void destoryGLFW()

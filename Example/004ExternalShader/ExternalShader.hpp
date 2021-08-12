@@ -1,23 +1,24 @@
-#pragma once
 
 #include <GLFWApplication.hpp>
-#include <chrono>
+#include <LoadShader.hpp>
 
+#include <chrono>
 
 GLfloat vertices[] = {0.0f, 0.5f, 0.5f, -0.5f, -0.5f, -0.5f};
 
-class DrawTrangle : public GLFWApplication
+class ExternalShader : public GLFWApplication
 {
+
   public:
-    int vertexShader;
-    int fragmentShader;
+    // int vertexShader;
+    // int fragmentShader;
     int shaderProgram;
 
     unsigned int VAO, VBO;
 
     void run()
     {
-        createShader();
+        // createShader();
         createProgram();
         createVBO();
         createVAO();
@@ -44,72 +45,13 @@ class DrawTrangle : public GLFWApplication
         }
     }
 
-    void createShader()
-    {
-
-        const char *vertexShaderSource = "#version 330 core\n"
-                                         "in vec2 position;\n"
-                                         "void main()\n"
-                                         "{\n"
-                                         "   gl_Position = vec4(position, 0.0, 1.0);\n"
-                                         "}\0";
-
-        const char *fragmentShaderSource = "#version 330 core\n"
-                                           "out vec4 FragColor;\n"
-                                           "uniform vec3 TriangleColor;"
-                                           "void main()\n"
-                                           "{\n"
-                                           "   FragColor =  vec4(TriangleColor, 1.0);\n"
-                                           "}\0";
-
-        vertexShader = glCreateShader(GL_VERTEX_SHADER);
-        glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-        glCompileShader(vertexShader);
-        // check for shader compile errors
-        int success;
-        char infoLog[512];
-        glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-        if (!success)
-        {
-            glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-            std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-        }
-        // fragment shader
-        fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-        glCompileShader(fragmentShader);
-        // check for shader compile errors
-        glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-        if (!success)
-        {
-            glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-            std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-        }
-    }
-
     void setUniform()
     {
     }
 
     void createProgram()
     {
-
-        int success;
-        char infoLog[512];
-        // link shaders
-        shaderProgram = glCreateProgram();
-        glAttachShader(shaderProgram, vertexShader);
-        glAttachShader(shaderProgram, fragmentShader);
-        glLinkProgram(shaderProgram);
-        // check for linking errors
-        glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-        if (!success)
-        {
-            glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-            std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
-        }
-        glDeleteShader(vertexShader);
-        glDeleteShader(fragmentShader);
+        shaderProgram = LoadShaders("SimpleVertexShader.vert", "SimpleFragmentShader.frag");
     }
 
     void createVAO()
